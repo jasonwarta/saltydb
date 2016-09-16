@@ -25,6 +25,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 		self.send_header('Content-type','text/html')
 		self.end_headers()
 		queryName=urllib.unquote(queryName)
+		print(queryName)
 		arr={"wins":0,"games":0,"name":"not found"}
 		results = db.names.find({"name":queryName})
 		for doc in results:
