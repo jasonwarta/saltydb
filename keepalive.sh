@@ -8,7 +8,7 @@ PID=""
 if ! pgrep -f server.py 2>&1 > /dev/null; then
 	echo "server wasn't running."
 	echo "starting server"
-	./server.py &
+	nohup ./server.py &
 	PID=$!
 else
 	echo "server was already running"
@@ -30,6 +30,6 @@ while true; do
 	done
 
 	echo "$(date): Restarting saltydb python server" >> death_log.txt
-	./server.py &
+	nohup ./server.py &
 	PID=$!
 done
