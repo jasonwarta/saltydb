@@ -15,12 +15,20 @@ db=client.saltybet
 
 class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 	def do_GET(self):
-		page = open("results.html","r")
-		self.send_response(200)
-		self.send_header("Content-type","text/html")
-		self.end_headers()
-		self.wfile.write(page.read())
-		self.wfile.close()
+		try:
+			page = open("results.html","r")
+			self.send_response(200)
+			self.send_header("Content-type","text/html")
+			self.end_headers()
+			self.wfile.write(page.read())
+			self.wfile.close()
+		except e:
+			exc_type,exc_value,exc_traceback=sys.exc_info()
+			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
+			with open('error_log','a') as error_log:
+				error_log.write(datetime.datetime.now() + " GET " + line for line in lines)
+				error_log.close()
+			pass
 
 	def do_POST(self):
 		try:
@@ -40,7 +48,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			exc_type,exc_value,exc_traceback=sys.exc_info()
 			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
 			with open('error_log','a') as error_log:
-				error_log.write(datetime.datetime.now() + " " + line for line in lines)
+				error_log.write(datetime.datetime.now() + " POST " + line for line in lines)
 				error_log.close()
 			pass
 
@@ -53,7 +61,7 @@ if __name__ == '__main__':
 		exc_type,exc_value,exc_traceback=sys.exc_info()
 		lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
 		with open('error_log','a') as error_log:
-			error_log.write(datetime.datetime.now() + " " + line for line in lines)
+			error_log.write(datetime.datetime.now() + " MAIN " + line for line in lines)
 			error_log.close()
 		pass
 	
