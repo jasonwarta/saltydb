@@ -3,8 +3,18 @@
 # keepalive script for restarting python server when it breaks
 # Usage: place in same dir as server and run from there
 
-./server.py &
-PID=$!
+
+PID=""
+if ! pgrep -f server.py 2>&1 > /dev/null; then
+	echo "server wasn't running."
+	echo "starting server"
+	./server.py &
+	PID=$!
+else
+	echo "server was already running"
+	echo "attaching to server process"
+	PID=$(pgrep -f server.py)
+fi
 
 
 function terminate {
