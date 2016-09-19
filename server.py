@@ -22,7 +22,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			self.end_headers()
 			self.wfile.write(page.read())
 			self.wfile.close()
-		except e:
+		except:
 			exc_type,exc_value,exc_traceback=sys.exc_info()
 			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
 			with open('error_log','a') as error_log:
@@ -44,7 +44,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 					if key != "_id":
 						arr[key] = doc[key]
 			self.wfile.write(json.dumps(arr))
-		except e:
+		except:
 			exc_type,exc_value,exc_traceback=sys.exc_info()
 			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
 			with open('error_log','a') as error_log:
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 		Handler = MyHandler
 		server=BaseHTTPServer.HTTPServer(('127.0.0.1',8080),MyHandler)
 		server.serve_forever()
-	except e:
+	except:
 		exc_type,exc_value,exc_traceback=sys.exc_info()
 		lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
 		with open('error_log','a') as error_log:
