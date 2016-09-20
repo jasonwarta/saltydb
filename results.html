@@ -18,9 +18,14 @@
 		<th style="width:60px">Wins</th>
 	</tr>
 	<tr style="height:30px">
-		<td id="name"></td>
-		<td id="games"></td>
-		<td id="wins"></td>
+		<td id="first_name"></td>
+		<td id="first_games"></td>
+		<td id="first_wins"></td>
+	</tr>
+	<tr style="height:30px">
+		<td id="second_name"></td>
+		<td id="second_games"></td>
+		<td id="second_wins"></td>
 	</tr>
 </table>
 
@@ -33,50 +38,19 @@
 			queryButton.click();
 	});
 
-	function xml(str,callback,data){
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function(){
-			if(xmlhttp.readyState == 4){
-				if(xmlhttp.status == 200){
-					if(callback)
-						callback(xmlhttp.responseText);
-				}
-			}
-		}
-		xmlhttp.open('POST',encodeURI('?'+str),true);
-		xmlhttp.send(data);
-	}
-
-
 	queryButton.onclick=function(){
-		xml(
-			query.value,
-			function(data){
-				var result = JSON.parse(data);
-				document.getElementById("name").innerHTML = result["name"];
-				document.getElementById("games").innerHTML = result["games"];
-				document.getElementById("wins").innerHTML = result["wins"];
-			},
-			query.value.toString();
-		);
+		var req = new XMLHttpRequest();
+		req.onreadystatechange = function(){
+			if(this.readyState == 4 && this.status==200){
+				var result = JSON.parse(this.responseText);
+				document.getElementById("first_name").innerHTML = result["name"];
+				document.getElementById("first_games").innerHTML = result["games"];
+				document.getElementById("first_wins").innerHTML = result["wins"];
+			}
+		};
+		req.open('POST',encodeURI('?'+query.value),true);
+		req.send(query.value.toString());
 	};
-
-
-
-
-		// var req = new XMLHttpRequest();
-		// req.onreadystatechange = function(){
-		// 	if(this.readyState == 4 && this.status==200){
-		// 		var result = JSON.parse(this.responseText);
-		// 		document.getElementById("name").innerHTML = result["name"];
-		// 		document.getElementById("games").innerHTML = result["games"];
-		// 		document.getElementById("wins").innerHTML = result["wins"];
-		// 	}
-		// };
-		// req.open('POST',encodeURI('?'+query.value),true);
-		// req.send(query.value.toString());
-	// };
-
 </script>
 </body>
 
