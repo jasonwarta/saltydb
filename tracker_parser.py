@@ -109,7 +109,7 @@ if __name__=='__main__':
                       loser=team1
                     
                   elif "by" in line:
-                    if team1 in line && team2 in line:
+                    if team1 in line and team2 in line:
                       author1=line[(line.find("by ")+3):(line.find(", "))]
                       author2=line[(line.find(", ")+2):(line.find("\n"))]
 
