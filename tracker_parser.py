@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pymongo import MongoClient
+# from pymongo import MongoClient
 import select
 import socket
 import time
@@ -36,7 +36,12 @@ if __name__=='__main__':
   team1=''
   team2=''
   winner=''
+  loser=''
   line=''
+  author1=''
+  author2=''
+  tier=''
+  mode=''
 
   random.seed();
   nRand = random.randint(1000000000000,9999999999999)
@@ -69,6 +74,7 @@ if __name__=='__main__':
               if starts_with(line,ping):
                 sock.send(pong)
               elif starts_with(line,waifu):
+                print(line)
                 line=line[len(waifu):]
 
                 if state == State.OPEN:
@@ -77,22 +83,47 @@ if __name__=='__main__':
                     # parse out player/team names
                     team1=line[(line.find("for ")+4):(line.find(" vs "))]
                     team2=line[(line.find(" vs ")+4):(line.find("! ("))]
+                    tier=line[(line.find("! (")+3):(line.find(" Tier)"))]
+                    if "(matchmaking)"in line:
+                      mode="matchmaking"
+                    elif "tournament bracket" in line:
+                      mode="tournament"
+                    else:
+                      mode=""
+
+                    db.matches.insert(
+                        { 'player1': team1 },
+                        { 'player2': team2 },
+                        { 'tier': teir },
+                        { 'mode': mode }
+                      )
 
                 if state == State.WINS:
                   if "wins" in line:
                     state=State.DONE
                     # parse out winner name
                     winner=line[:line.find(" wins!")]
+                    if team1 in winner:
+                      loser=team2
+                    else:
+                      loser=team1
+                    
+                  elif "by" in line:
+                    if team1 in line && team2 in line:
+                      author1=line[(line.find("by ")+3):(line.find(", "))]
+                      author2=line[(line.find(", ")+2):(line.find("\n"))]
 
                 if state == State.DONE:
                   state=State.OPEN
                   db.names.update(
                       { 'name': team1 },
+                      { 'author': author1 },
                       { '$inc': { 'games': 1 } },
                       upsert=True
                     )
                   db.names.update(
                       { 'name': team2 },
+                      { 'author': author2 },
                       { '$inc': { 'games': 1 } },
                       upsert=True
                     )
@@ -101,13 +132,32 @@ if __name__=='__main__':
                       { '$inc': { 'wins': 1 } },
                       upsert=True
                     )
+                  db.names.update(
+                      { 'name': winner },
+                      { '$inc': { 'losses': 1} },
+                      upsert=True
+                    )
+                  db.matches.update(
+                      { 'player1': team1 },
+                      { 'player2': team2 },
+                      { 'tier': teir },
+                      { 'mode': mode },
+                      { 'winner': winner },
+                      upsert=True
+                    )
                   with open('log','a') as fstr:
-                    fstr.write("Team1:'" + team1 + "',Team2:'" + team2 + "'")
-                    fstr.write("Winner:'" + winner + "'")
-                  printWinner(team1,team2,winner)
+                    fstr.write(team1+","+author1+","+team2+","+author2+","+tier+","+mode+","+winner+"\n")
+
+                  # printWinner(team1,team2,winner)
                   team1=''
                   team2=''
                   winner=''
+                  loser=''
+                  line=''
+                  author1=''
+                  author2=''
+                  tier=''
+                  mode=''
 
               line=''
         time.sleep(0.1)
