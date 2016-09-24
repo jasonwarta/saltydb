@@ -110,7 +110,7 @@ if __name__=='__main__':
                     else:
                       loser=team1
                     
-                  elif "by" in line:
+                  if "by" in line:
                     if team1 in line and team2 in line:
                       author1=line[(line.find("by ")+3):(line.find(", "))]
                       author2=line[(line.find(", ")+2):(line.find("\n"))]
@@ -119,14 +119,18 @@ if __name__=='__main__':
                   state=State.OPEN
                   db.names.update(
                       { 'name': team1 },
-                      { 'author': author1 },
-                      { '$inc': { 'games': 1 } },
+                      { 
+                        'author': author1,
+                        '$inc': { 'games': 1 } 
+                      },
                       upsert=True
                     )
                   db.names.update(
                       { 'name': team2 },
-                      { 'author': author2 },
-                      { '$inc': { 'games': 1 } },
+                      { 
+                        'author': author2,
+                        '$inc': { 'games': 1 } 
+                      },
                       upsert=True
                     )
                   db.names.update(
