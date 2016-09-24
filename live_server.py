@@ -24,11 +24,11 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			self.wfile.write(page.read())
 			self.wfile.close()
 		except:
-			exc_type,exc_value,exc_traceback=sys.exc_info()
-			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
-			with open('error_log','a') as error_log:
-				error_log.write("GET " + line for line in lines)
-				error_log.close()
+			# exc_type,exc_value,exc_traceback=sys.exc_info()
+			# lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
+			# with open('error_log','a') as error_log:
+			# 	error_log.write("GET " + line for line in lines)
+			# 	error_log.close()
 			pass
 
 	def do_POST(self):
@@ -48,11 +48,11 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 						arr[key] = doc[key]
 			self.wfile.write(json.dumps(arr))
 		except:
-			exc_type,exc_value,exc_traceback=sys.exc_info()
-			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
-			with open('error_log','a') as error_log:
-				error_log.write("POST " + line for line in lines)
-				error_log.close()
+			# exc_type,exc_value,exc_traceback=sys.exc_info()
+			# lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
+			# with open('error_log','a') as error_log:
+			# 	error_log.write("POST " + line for line in lines)
+			# 	error_log.close()
 			pass
 
 if __name__ == '__main__':
@@ -61,9 +61,9 @@ if __name__ == '__main__':
 		server=BaseHTTPServer.HTTPServer(('127.0.0.1',8081),MyHandler)
 		server.serve_forever()
 	except:
-		exc_type,exc_value,exc_traceback=sys.exc_info()
-		lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
-		with open('error_log','a') as error_log:
-			error_log.write("MAIN " + line for line in lines)
-			error_log.close()
+		# exc_type,exc_value,exc_traceback=sys.exc_info()
+		# lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
+		# with open('error_log','a') as error_log:
+		# 	error_log.write("MAIN " + line for line in lines)
+		# 	error_log.close()
 		pass
