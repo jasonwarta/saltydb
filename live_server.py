@@ -33,7 +33,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 	def do_POST(self):
 		try:
-			query=db.matches.find().limit(1).sort({$natural:-1}).pretty()
+			query=db.matches.find().limit(1).sort({'$natural':-1}).pretty()
 			# query=urlparse.urlparse(self.path).query
 			print(query)
 			self.send_response(200)
@@ -51,7 +51,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			exc_type,exc_value,exc_traceback=sys.exc_info()
 			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
 			with open('error_log','a') as error_log:
-				error_log.write(datetime.datetime.now() + " POST " + line for line in lines)
+				error_log.write("POST " + line for line in lines)
 				error_log.close()
 			pass
 
