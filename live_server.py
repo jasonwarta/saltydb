@@ -27,7 +27,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			exc_type,exc_value,exc_traceback=sys.exc_info()
 			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
 			with open('error_log','a') as error_log:
-				error_log.write(datetime.datetime.now() + " GET " + line for line in lines)
+				error_log.write("GET " + line for line in lines)
 				error_log.close()
 			pass
 
@@ -64,6 +64,6 @@ if __name__ == '__main__':
 		exc_type,exc_value,exc_traceback=sys.exc_info()
 		lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
 		with open('error_log','a') as error_log:
-			error_log.write(datetime.datetime.now() + " MAIN " + line for line in lines)
+			error_log.write("MAIN " + line for line in lines)
 			error_log.close()
 		pass
