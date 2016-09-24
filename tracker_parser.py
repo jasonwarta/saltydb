@@ -140,13 +140,21 @@ if __name__=='__main__':
                       upsert=True
                     )
                   db.matches.update(
-                      { 'player1': team1 },
-                      { 'player2': team2 },
-                      { 'tier': teir },
-                      { 'mode': mode },
+                      { 'player1': team1,
+                        'player2': team2,
+                        'tier': tier,
+                        'mode': mode },
                       { 'winner': winner },
                       upsert=True
                     )
+                  # db.matches.update(
+                  #     { 'player1': team1 },
+                  #     { 'player2': team2 },
+                  #     { 'tier': teir },
+                  #     { 'mode': mode },
+                  #     { 'winner': winner },
+                  #     upsert=True
+                  #   )
                   with open('log','a') as fstr:
                     fstr.write(team1+","+author1+","+team2+","+author2+","+tier+","+mode+","+winner+"\n")
 
