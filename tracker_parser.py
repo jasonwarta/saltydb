@@ -42,6 +42,7 @@ if __name__=='__main__':
   author2=''
   tier=''
   mode=''
+  matchID=''
 
   random.seed();
   nRand = random.randint(1000000000000,9999999999999)
@@ -91,7 +92,7 @@ if __name__=='__main__':
                     else:
                       mode=""
 
-                    db.matches.insert(
+                    matchID = db.matches.insert(
                         { 
                           'player1': team1,
                           'player2': team2,
@@ -118,47 +119,53 @@ if __name__=='__main__':
                 if state == State.DONE:
                   state=State.OPEN
                   db.names.update(
-                      { 'name': team1 },
                       { 
-                        'author': author1,
+                        'name': team1
+                      },
+                      { 
+                          '$set': {'author': author1 },
+                          '$inc': { 'games': 1 } 
+                      },
+                      upsert=True
+                    )
+                  db.names.update(
+                      { 
+                        'name': team2 
+                      },
+                      { 
+                        '$set': {'author': author2 },
                         '$inc': { 'games': 1 } 
                       },
                       upsert=True
                     )
                   db.names.update(
-                      { 'name': team2 },
                       { 
-                        'author': author2,
-                        '$inc': { 'games': 1 } 
+                        'name': winner
+                      },
+                      { 
+                        '$inc': { 'wins': 1 }
                       },
                       upsert=True
                     )
                   db.names.update(
-                      { 'name': winner },
-                      { '$inc': { 'wins': 1 } },
-                      upsert=True
-                    )
-                  db.names.update(
-                      { 'name': winner },
-                      { '$inc': { 'losses': 1} },
+                      { 
+                        'name': winner
+                      },
+                      { 
+                        '$inc': { 'losses': 1}
+                      },
                       upsert=True
                     )
                   db.matches.update(
-                      { 'player1': team1,
-                        'player2': team2,
-                        'tier': tier,
-                        'mode': mode },
-                      { 'winner': winner },
-                      upsert=True
+                      { 
+                        '_id': matchID
+                                },
+                                { 
+                                  '$set': { 'winner': winner }
+                                },
+                                upsert=True
                     )
-                  # db.matches.update(
-                  #     { 'player1': team1 },
-                  #     { 'player2': team2 },
-                  #     { 'tier': teir },
-                  #     { 'mode': mode },
-                  #     { 'winner': winner },
-                  #     upsert=True
-                  #   )
+                  
                   with open('log','a') as fstr:
                     fstr.write(team1+","+author1+","+team2+","+author2+","+tier+","+mode+","+winner+"\n")
 
@@ -171,6 +178,7 @@ if __name__=='__main__':
                   author2=''
                   tier=''
                   mode=''
+                  matchID=''
 
               line=''
         time.sleep(0.1)
