@@ -24,36 +24,36 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			self.wfile.write(page.read())
 			self.wfile.close()
 		except:
-			exc_type,exc_value,exc_traceback=sys.exc_info()
-			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
-			with open('error_log','a') as error_log:
-				error_log.write(str(datetime.datetime.now() + " GET " + line for line in lines))
-				error_log.write("\n")
-				error_log.close()
+			# exc_type,exc_value,exc_traceback=sys.exc_info()
+			# lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
+			# with open('error_log','a') as error_log:
+			# 	error_log.write(str(datetime.datetime.now() + " GET " + line for line in lines))
+			# 	error_log.write("\n")
+			# 	error_log.close()
 			pass
 
 	def do_POST(self):
 		try:
 			query=db.matches.find().limit(1).sort({'$natural':-1}).pretty()
-			# print(query)
-			# self.send_response(200)
-			# self.send_header('Content-type','text/html')
-			# self.end_headers()
-			# queryName=urllib.unquote(queryName)
-			# arr={"wins":0,"games":0,"name":"not found"}
-			# results = db.names.find({"name":queryName})
-			# for doc in results:
-			# 	for key in doc:
-			# 		if key != "_id":
-			# 			arr[key] = doc[key]
-			# self.wfile.write(json.dumps(arr))
+			print(query)
+			self.send_response(200)
+			self.send_header('Content-type','text/html')
+			self.end_headers()
+			queryName=urllib.unquote(queryName)
+			arr={"wins":0,"games":0,"name":"not found"}
+			results = db.names.find({"name":queryName})
+			for doc in results:
+				for key in doc:
+					if key != "_id":
+						arr[key] = doc[key]
+			self.wfile.write(json.dumps(arr))
 		except:
-			exc_type,exc_value,exc_traceback=sys.exc_info()
-			lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
-			with open('error_log','a') as error_log:
-				error_log.write(str(datetime.datetime.now() + " POST " + line for line in lines))
-				error_log.write("\n")
-				error_log.close()
+			# exc_type,exc_value,exc_traceback=sys.exc_info()
+			# lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
+			# with open('error_log','a') as error_log:
+			# 	error_log.write( str(datetime.datetime.now() + " POST " + line for line in lines) )
+			# 	error_log.write("\n")
+			# 	error_log.close()
 			pass
 
 if __name__ == '__main__':
@@ -62,10 +62,10 @@ if __name__ == '__main__':
 		server=BaseHTTPServer.HTTPServer(('127.0.0.1',8081),MyHandler)
 		server.serve_forever()
 	except:
-		exc_type,exc_value,exc_traceback=sys.exc_info()
-		lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
-		with open('error_log','a') as error_log:
-			error_log.write(str(datetime.datetime.now() + " MAIN " + line for line in lines))
-			error_log.write("\n")
-			error_log.close()
+		# exc_type,exc_value,exc_traceback=sys.exc_info()
+		# lines=traceback.format_exception(exc_type,exc_value,exc_traceback)
+		# with open('error_log','a') as error_log:
+		# 	error_log.write(str(datetime.datetime.now() + " MAIN " + line for line in lines))
+		# 	error_log.write("\n")
+		# 	error_log.close()
 		pass
