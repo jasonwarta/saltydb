@@ -92,10 +92,12 @@ if __name__=='__main__':
                       mode=""
 
                     db.matches.insert(
-                        { 'player1': team1 },
-                        { 'player2': team2 },
-                        { 'tier': teir },
-                        { 'mode': mode }
+                        { 
+                          'player1': team1,
+                          'player2': team2,
+                          'tier': tier,
+                          'mode': mode 
+                        }
                       )
 
                 if state == State.WINS:
@@ -153,7 +155,6 @@ if __name__=='__main__':
                   team2=''
                   winner=''
                   loser=''
-                  line=''
                   author1=''
                   author2=''
                   tier=''

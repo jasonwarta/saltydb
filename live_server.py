@@ -16,6 +16,7 @@ db=client.saltybet
 class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 	def do_GET(self):
 		try:
+			print(self.path)
 			page = open("live_results.html","r")
 			self.send_response(200)
 			self.send_header("Content-type","text/html")
@@ -32,7 +33,8 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 	def do_POST(self):
 		try:
-			query=urlparse.urlparse(self.path).query
+			query=db.matches.find().limit(1).sort({$natural:-1}).pretty()
+			# query=urlparse.urlparse(self.path).query
 			print(query)
 			self.send_response(200)
 			self.send_header('Content-type','text/html')
